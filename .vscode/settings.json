@@ -1,0 +1,9 @@
+{
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar",
+        "c:\\Users\\douga\\Downloads\\jar_files (1)\\org.eclipse.paho.client.mqttv3-1.2.5.jar",
+        "c:\\Users\\douga\\Downloads\\com.fasterxml.jackson.annotations.jar\\com.fasterxml.jackson.annotations.jar",
+        "c:\\Users\\douga\\Downloads\\com.fasterxml.jackson.core.jar\\com.fasterxml.jackson.core.jar",
+        "c:\\Users\\douga\\Downloads\\com.fasterxml.jackson.databind.jar\\com.fasterxml.jackson.databind.jar"
+    ]
+}
