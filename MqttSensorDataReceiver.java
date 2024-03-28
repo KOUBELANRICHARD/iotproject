@@ -15,31 +15,36 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-//import java.net.HttpURLConnection;
 import java.net.URL;
-//import java.nio.charset.StandardCharsets;
+
 
 public class MqttSensorDataReceiver {
             
    
 
-    private static void insertDistanceIntoDatabase(Connection connection, double distance, String Name)  throws SQLException {
+    private static void insertDistanceIntoDatabase(Connection connection, double distance)  throws SQLException {
 
-        int sensorId = findSensorIdByName(Name);
-        String sensorname = "levelWater";
-        //System.out.println(sensorId);
+        int #_id = 0;
+        int controller_id = 0;
+        int captor_id= 0;
+
+      
         
-        String sql = "INSERT INTO Mesures (capteur_id,valeur, nom, actif) VALUES (?, ?, ?, TRUE)"; // Assurez-vous que cela correspond à la structure de votre table
+        String sql = "INSERT INTO CONTROLLER_CAPTORS (#_id, controller_id, captor_id, value) VALUES (?, ?, ?, ?)"; 
+
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
-            preparedStatement.setInt(1, sensorId);
+            preparedStatement.setInt(1, #_id);
             
-            preparedStatement.setDouble(2, distance);
+            preparedStatement.setInt(2, controller_id);
 
-            preparedStatement.setString(3, sensorname);
+            preparedStatement.setInt(3, captor_id); 
+
+            preparedStatement.setDouble(4, distance);
+
             int affectedRows = preparedStatement.executeUpdate();
+
             if (affectedRows > 0) {
                 System.out.println("La distance a été insérée avec succès : " + distance);
             } else {
@@ -50,9 +55,10 @@ public class MqttSensorDataReceiver {
         }
     }
 
+    /*
     private static int findSensorIdByName(String name) throws SQLException {
 
-        Connection connection = Connectdb.getConnection();
+        Connection connection = new Connexion().renvoi();
         String sql = "SELECT capteur_id FROM Capteurs WHERE nom = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, name);
@@ -66,21 +72,22 @@ public class MqttSensorDataReceiver {
         return -1;  // -1 signifie que le capteur n'a pas été trouvé
     }
 
-    
-        
+    */
 
     public static void main(String[] args) {
 
         String serverURI = "tcp://nam1.cloud.thethings.network:1883"; 
         String clientId = MqttClient.generateClientId();
         String topic = "v3/my-lora-testapp@ttn/devices/eui-a8610a32301a7818/#"; 
-        Connection connection = Connectdb.getConnection(); // class connectio n propre a mon projet
+
+        Connection connection = new Connexion().renvoi(); //class connection au projet
 
 
         try {
+
             MqttClient client = new MqttClient(serverURI, clientId);
             MqttConnectOptions options = new MqttConnectOptions();
-            options.setUserName("my-lora-testapp@ttn"); // Remplacer par votre nom d'utilisateur MQTT
+            options.setUserName("my-lora-testapp@ttn"); //Remplacer par votre nom d'utilisateur MQTT
             options.setPassword("NNSXS.M3LVHP4XCLPOGNCYTHTLRQWPIM5TGEKMFRIOFVY.5EKC7DNQ4XOAGJLKTULD5INAVAU6JLRZ5PM6GJ45SCKJJWZ4NXYA".toCharArray()); // Remplacer par votre mot de passe MQTT
             client.connect(options);
 
@@ -92,8 +99,11 @@ public class MqttSensorDataReceiver {
 
                 @Override
                 public void messageArrived(String topic, MqttMessage message) throws Exception {
+
                     // Conversion du message MQTT reçu en String
+
                     String messageContent = new String(message.getPayload());
+
                     //System.out.println("Message arrived: " + messageContent);
 
                     // Utiliser Jackson pour analyser le contenu
@@ -108,35 +118,13 @@ public class MqttSensorDataReceiver {
                         String distance = decodedPayload.asText();
                         double distancef = Double.parseDouble(distance);
                         System.out.println("Distance: " + distance);
-                        insertDistanceIntoDatabase(connection, distancef, "levelWater"); 
+                        insertDistanceIntoDatabase(connection, distancef); 
                     } else {
                         System.out.println("Le champ 'text' est manquant dans le payload décodé.");
                     }
                 }
 
-                private static void sendDistanceToServer(double distancef) {
-                    
-    String query = "distance=" + distancef; // Vous pouvez ajuster cela selon la structure attendue par votre serveur
-    byte[] postData = query.getBytes(StandardCharsets.UTF_8);
-
-    try {
-        URL url = new URL("http://192.168.1.49:8080/data");
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setDoOutput(true);
-        conn.setRequestMethod("POST");
-        conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-        conn.setRequestProperty("Content-Length", String.valueOf(postData.length));
-
-        conn.getOutputStream().write(postData);
-
-        int responseCode = conn.getResponseCode(); // Vous pouvez utiliser cette réponse pour gérer les cas d'erreur
-        System.out.println("POST Response Code :: " + responseCode);
-
-        conn.disconnect();
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-}
+               
 
                 @Override
                 public void deliveryComplete(IMqttDeliveryToken token) {
