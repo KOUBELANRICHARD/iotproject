@@ -1,0 +1,54 @@
+body {
+  background-color: rgba(201, 248, 201, 0.863);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 90px;
+}
+.my-container {
+  border: 3px solid rgba(201, 248, 201, 0.863);
+}
+.my-row {
+  border: 1px solid rgba(99, 100, 99, 0.863);
+  text-align: center;
+  margin-top: 5px;
+}
+.my-col {
+  border: 1px solid rgba(201, 248, 201, 0.863);
+}
+.navbar {
+  border: 2px solid green;
+  box-shadow: green;
+}
+.nav-link {
+  border: 1px solid rgb(180, 180, 180);
+  font-size: 20px;
+  margin-right: 20px;
+}
+
+a:hover {
+  background-color: #71d316;
+  font-weight: bold;
+}
+
+.active {
+  background: #71d316;
+}
+
+h3 {
+  text-align: center;
+}
+h2 {
+  color: dodgerblue;
+}
+
+form {
+  background-color: rgb(155, 153, 153);
+  opacity: 0.8;
+  margin: auto;
+  width: 350px;
+  border: rgb(161, 97, 12) solid 2px;
+  padding: 1px;
+  border-radius: 5px;
+  border-top-left-radius: 20px;
+}
