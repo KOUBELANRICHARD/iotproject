@@ -304,20 +304,14 @@ public class DataServer {
             // Ajouter les données à la pile
             dataStack.push(receivedData);
 
-            // Envoyer une réponse au client
-            String response = "Données reçues avec succès";
-            exchange.sendResponseHeaders(200, response.length());
-            OutputStream outputStream = exchange.getResponseBody();
-            outputStream.write(response.getBytes());
-            outputStream.close();
+          
 
             // Afficher les données dans la pile
             serverInstance.printDataStack();
 
             //
             serverInstance.insererDonneesDansLaBaseDeDonnees();
-            serverInstance.insererDonneeDansLaBaseDeDonnees(null, response);
-           
+          
         }
     }
 
