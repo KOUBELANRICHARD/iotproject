@@ -35,7 +35,7 @@ public class MqttSensorDataReceiver {
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
-            preparedStatement.setInt(1, #_id);
+            //preparedStatement.setInt(1, #_id);
             
             preparedStatement.setInt(2, controller_id);
 
